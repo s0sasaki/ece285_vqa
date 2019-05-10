@@ -25,3 +25,5 @@ vqaEvaluation (evaluation code)
    
 To make torch work:   
 export PATH=${PATH}:/datasets/torch/install/bin
+   
+export PATH=${PATH}:$(find /datasets/torch/install -type d | tr '\n' ':' | sed 's/:$//')
