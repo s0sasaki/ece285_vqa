@@ -21,4 +21,7 @@ vqaTools (API to read and visualize data)
 
 This directory contains the Python evaluation code
 vqaEvalDemo.py (evaluation demo script)
-vqaEvaluation (evaluation code)
+vqaEvaluation (evaluation code)   
+   
+To make torch work:   
+export PATH=${PATH}:/datasets/torch/install/bin
