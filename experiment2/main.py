@@ -47,7 +47,7 @@ def load_datasets(config, phases):
     dataloaders = {x: DataLoader(
         datasets[x], batch_sampler=batch_samplers[x], num_workers=config['loader']['workers']) for x in phases}
     dataset_sizes = {x: len(datasets[x]) for x in phases}
-    print(dataset_sizes)
+    print("dataset size", dataset_sizes)
     print("ques vocab size: {}".format(len(VQADataset.ques_vocab)))
     print("ans vocab size: {}".format(len(VQADataset.ans_vocab)))
     return dataloaders, VQADataset.ques_vocab, VQADataset.ans_vocab
@@ -62,7 +62,8 @@ def main(config):
 
     # add model parameters to config
     config['model']['params']['vocab_size'] = len(ques_vocab)
-    config['model']['params']['output_size'] = len(ans_vocab) - 1   # -1 as don't want model to predict '<unk>'
+    #config['model']['params']['output_size'] = len(ans_vocab)-1 #-1 as don't want model to predict '<unk>' # This causes device error?
+    config['model']['params']['output_size'] = len(ans_vocab) #sasaki
     config['model']['params']['extract_img_features'] = 'preprocess' in config['data']['images'] and config['data']['images']['preprocess']
     # which features dir? test, train or validate?
     config['model']['params']['features_dir'] = None #sasaki

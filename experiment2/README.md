@@ -2,8 +2,6 @@
 
 This is another implementation of VQA based on https://github.com/Shivanshu-Gupta/Visual-Question-Answering.
 
-It runs but has a problem probably with GPU setting. (It stops at the first or second epoch with a device error. It might work if the GPU flag was turned off, but it's slow.)
-
 To execute the code, try these at the experiment2 directory:
 
 ```

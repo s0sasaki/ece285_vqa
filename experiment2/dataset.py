@@ -44,7 +44,7 @@ class VQADataset(torch.utils.data.Dataset):
     def __len__(self):
         return len(self.data_encoded)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx): # This is pretty slow. Needs to torch.load() the preprocessed data. (Ref: dataset_save.py)
         data = self.data_encoded[idx]
         question    = data['question']
         answer      = data['answer']
