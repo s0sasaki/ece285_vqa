@@ -1,0 +1,2 @@
+torchtext    == 0.3.1     
+tensorboardX == 1.6       
