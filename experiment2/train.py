@@ -45,7 +45,7 @@ def train(model, dataloader, criterion, optimizer, use_gpu=False):
         #     break
     epoch_loss = running_loss / example_count
     #acc = (running_corrects / len(dataloader.dataset)) * 100 #??? sasaki
-    acc = (running_corrects / example_count) * 100
+    acc = (float(running_corrects) / example_count) * 100
     print('Train Loss: {:.4f} Acc: {:2.3f} ({}/{})'.format(epoch_loss,
                                                            acc, running_corrects, example_count))
     return epoch_loss, acc
@@ -76,7 +76,7 @@ def validate(model, dataloader, criterion, use_gpu=False):
         example_count += answers.size(0)
     epoch_loss = running_loss / example_count
     #acc = (running_corrects / len(dataloader.dataset)) * 100 #??? sasaki
-    acc = (running_corrects / example_count) * 100
+    acc = (float(running_corrects) / example_count) * 100
     print('Validation Loss: {:.4f} Acc: {:2.3f} ({}/{})'.format(epoch_loss,
                                                                 acc, running_corrects, example_count))
     return epoch_loss, acc
