@@ -2,7 +2,7 @@ prefix: vqa_sgd
 verbose: True
 mode: 'train'
 save_dir: 'scratch/vqa_sgd'
-use_gpu: False #True sasaki
+use_gpu: True
 debug: False
 seed: 123213
 data:
