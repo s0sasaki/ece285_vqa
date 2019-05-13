@@ -25,7 +25,6 @@ class VQADataset(torch.utils.data.Dataset):
         if len(VQADataset.ques_vocab) == 0:
             data_train = self._read_data("train") 
             VQADataset.ques_vocab, VQADataset.wtoi_question, VQADataset.ans_vocab, VQADataset.wtoi_answer  = self._build_vocab(data_train)
-            #self.itow_question, self.wtoi_question, self.itow_answer, self.wtoi_answer  = self._build_vocab(data_train)
 
         self.mode = mode
         self.data = self._read_data(mode)

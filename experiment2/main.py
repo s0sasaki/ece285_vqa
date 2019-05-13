@@ -13,7 +13,7 @@ from dataset import VQADataset, VQABatchSampler
 from train import train_model, test_model
 # from vqa_mutan_bilstm import VQAModel as VQAModel
 from vqa import VQAModel
-from san import SANModel
+#from san import SANModel
 from scheduler import CustomReduceLROnPlateau
 
 parser = argparse.ArgumentParser()
@@ -67,28 +67,15 @@ def main(config):
     config['model']['params']['extract_img_features'] = 'preprocess' in config['data']['images'] and config['data']['images']['preprocess']
     # which features dir? test, train or validate?
     config['model']['params']['features_dir'] = None #sasaki
-    #config['model']['params']['features_dir'] = os.path.join( #sasaki
-    #    config['data']['dir'], config['data']['test']['emb_dir'])
-    if config['model']['type'] == 'vqa':
-        model = VQAModel(mode=config['mode'], **config['model']['params'])
-    elif config['model']['type'] == 'san':
-        model = SANModel(mode=config['mode'], **config['model']['params'])
+
+    model = VQAModel(mode=config['mode'], **config['model']['params']) # the original code has type options
     print(model)
     criterion = nn.CrossEntropyLoss()
 
-    if config['optim']['class'] == 'sgd':
-        optimizer = optim.SGD(filter(lambda p: p.requires_grad, model.parameters()),
-                              **config['optim']['params'])
-    elif config['optim']['class'] == 'rmsprop':
-        optimizer = optim.RMSprop(filter(lambda p: p.requires_grad, model.parameters()),
-                                  **config['optim']['params'])
-    else:
-        optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()),
-                               **config['optim']['params'])
+    optimizer = optim.SGD(filter(lambda p: p.requires_grad, model.parameters()), **config['optim']['params']) 
+    # the original code has 'class' (SGD/RMSprop/Adam) options
 
-        #best_acc = 0 #sasaki
     best_acc = 0 #sasaki
-    # Pdb().set_trace()
     startEpoch = 0
     if 'reload' in config['model']:
         pathForTrainedModel = os.path.join(config['save_dir'],

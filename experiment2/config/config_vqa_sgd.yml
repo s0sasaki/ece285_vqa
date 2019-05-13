@@ -29,17 +29,17 @@ data:
         pin_memory: True
 
 model:
-    type: vqa
+    #type: vqa
     params:
         word_emb_size: 300
         emb_size: 1024
         image_channel_type: 'I'     # I/norm I
-        ques_channel_type: 'lstm'   # lstm/deeplstm
-        use_mutan: True             # True/False - to use mutan fusion on question and image embeddings or not
+        #ques_channel_type: 'lstm'   # lstm/deeplstm
+        #use_mutan: False #True             # True/False - to use mutan fusion on question and image embeddings or not
     reload: 'checkpoints.pth.tar'
 
 optim:
-    class: sgd      # sgd/rmsprop/adam
+    #class: sgd      # sgd/rmsprop/adam
     scheduler: 'CustomReduceLROnPlateau'
     scheduler_params:
         maxPatienceToStopTraining: 16
