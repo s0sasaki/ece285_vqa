@@ -1,2 +1,4 @@
-__pychache__
+*.pt
+*.json
+expriment2/__pychache__
 scratch

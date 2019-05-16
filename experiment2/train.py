@@ -7,20 +7,17 @@ from IPython.core.debugger import Pdb
 from scheduler import CustomReduceLROnPlateau
 import json
 
-
 def train(model, dataloader, criterion, optimizer, use_gpu=False):
     model.train()  # Set model to training mode
     running_loss = 0.0
     running_corrects = 0
     example_count = 0
     step = 0
-    # Pdb().set_trace()
     # Iterate over data.
     for questions, images, image_ids, answers, ques_ids in dataloader:
-        # print('questions size: ', questions.size())
         if use_gpu:
             questions, images, image_ids, answers = questions.cuda(), images.cuda(), image_ids.cuda(), answers.cuda()
-        questions, images, answers = Variable(questions).transpose(0, 1), Variable(images), Variable(answers)
+        questions, answers = Variable(questions).transpose(0, 1), Variable(answers)  #sasaki
 
         # zero grad
         optimizer.zero_grad()
@@ -33,7 +30,6 @@ def train(model, dataloader, criterion, optimizer, use_gpu=False):
         optimizer.step()
 
         # statistics
-        #running_loss += loss.data[0] #sasaki
         running_loss += loss.item()
         running_corrects += torch.sum((preds == answers).data)
         example_count += answers.size(0)
@@ -44,7 +40,6 @@ def train(model, dataloader, criterion, optimizer, use_gpu=False):
         # if step * batch_size == 40000:
         #     break
     epoch_loss = running_loss / example_count
-    #acc = (running_corrects / len(dataloader.dataset)) * 100 #??? sasaki
     acc = (float(running_corrects) / example_count) * 100
     print('Train Loss: {:.4f} Acc: {:2.3f} ({}/{})'.format(epoch_loss,
                                                            acc, running_corrects, example_count))
@@ -70,12 +65,10 @@ def validate(model, dataloader, criterion, use_gpu=False):
         loss = criterion(ans_scores, answers)
 
         # statistics
-        #running_loss += loss.data[0] #sasaki
         running_loss += loss.item()
         running_corrects += torch.sum((preds == answers).data)
         example_count += answers.size(0)
     epoch_loss = running_loss / example_count
-    #acc = (running_corrects / len(dataloader.dataset)) * 100 #??? sasaki
     acc = (float(running_corrects) / example_count) * 100
     print('Validation Loss: {:.4f} Acc: {:2.3f} ({}/{})'.format(epoch_loss,
                                                                 acc, running_corrects, example_count))
@@ -155,34 +148,3 @@ def save_checkpoint(save_dir, state, is_best):
     if is_best:
         shutil.copyfile(savepath, save_dir + '/' + 'model_best.pth.tar')
 
-
-def test_model(model, dataloader, itoa, outputfile, use_gpu=False):
-    model.eval()  # Set model to evaluate mode
-    example_count = 0
-    test_begin = time.time()
-    outputs = []
-
-    # Iterate over data.
-    for questions, images, image_ids, answers, ques_ids in dataloader:
-
-        if use_gpu:
-            questions, images, image_ids, answers = questions.cuda(
-            ), images.cuda(), image_ids.cuda(), answers.cuda()
-        questions, images, answers = Variable(questions).transpose(
-            0, 1), Variable(images), Variable(answers)
-        # zero grad
-        ans_scores = model(images, questions, image_ids)
-        _, preds = torch.max(ans_scores, 1)
-
-        outputs.extend([{'question_id': ques_ids[i], 'answer': itoa[str(
-            preds.data[i])]} for i in range(ques_ids.size(0))])
-
-        if example_count % 100 == 0:
-            print('(Example Count: {})'.format(example_count))
-        # statistics
-        example_count += answers.size(0)
-
-    json.dump(outputs, open(outputfile, 'w'))
-    print('(Example Count: {})'.format(example_count))
-    test_time = time.time() - test_begin
-    print('Test Time: {:.0f}m {:.0f}s'.format(test_time // 60, test_time % 60))

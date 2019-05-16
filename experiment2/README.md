@@ -6,8 +6,13 @@ To execute the code, try these at the experiment2 directory:
 
 ```
 pip install --user -r requirements.txt
-python main.py --config config/config_vqa_sgd.yml
+mkdir preprocessed
+mkdir preprocessed/img_vgg16feature_train
+mkdir preprocessed/img_vgg16feature_val
+python main.py -c config.yml
 ```
+
+To skip preprocessing after the first execution, disable 'preprocess' in the config file.
 
 The followings are the original README:
 

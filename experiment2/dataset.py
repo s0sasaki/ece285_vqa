@@ -1,10 +1,13 @@
 import json
 import string
+import pickle
 from collections import defaultdict
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+import torch.nn as nn
 import torchvision.transforms as transforms
+import torchvision.models as models
 from PIL import Image
 
 class VQADataset(torch.utils.data.Dataset):
@@ -21,24 +24,31 @@ class VQADataset(torch.utils.data.Dataset):
     ans_vocab = {}
     wtoi_question = {}
     wtoi_answer = {}
-    def __init__(self, mode='train'):
+    def __init__(self, mode='train', preprocess=True):
+
         if len(VQADataset.ques_vocab) == 0:
-            data_train = self._read_data("train") 
-            VQADataset.ques_vocab, VQADataset.wtoi_question, VQADataset.ans_vocab, VQADataset.wtoi_answer  = self._build_vocab(data_train)
+            if preprocess:
+                self._preprocess()
+            #data_train = self._read_data("train") 
+            #VQADataset.ques_vocab, VQADataset.wtoi_question, VQADataset.ans_vocab, VQADataset.wtoi_answer  = self._build_vocab(data_train)
+            with open('preprocessed/itow_question.json', 'r') as f: VQADataset.ques_vocab    = json.load(f)
+            with open('preprocessed/wtoi_question.json', 'r') as f: VQADataset.wtoi_question = json.load(f)
+            with open('preprocessed/itow_answer.json',   'r') as f: VQADataset.ans_vocab     = json.load(f)
+            with open('preprocessed/wtoi_answer.json',   'r') as f: VQADataset.wtoi_answer   = json.load(f)
 
         self.mode = mode
         self.data = self._read_data(mode)
         self.data_encoded = self._data_encoder(self.data, VQADataset.wtoi_question, VQADataset.wtoi_answer)
 
-        img_scale=(256, 256)
-        img_crop=224
-        self.transforms = transforms.Compose([
-            transforms.Resize(img_scale), #transforms.Scale(img_scale), #sasaki
-            transforms.CenterCrop(img_crop),
-            transforms.ToTensor(),
-            transforms.Normalize(
-                mean=[0.485, 0.456, 0.406],
-                std=[0.229, 0.224, 0.225])])
+        #img_scale=(256, 256)
+        #img_crop=224
+        #self.transforms = transforms.Compose([
+        #    transforms.Resize(img_scale), #transforms.Scale(img_scale), #sasaki
+        #    transforms.CenterCrop(img_crop),
+        #    transforms.ToTensor(),
+        #    transforms.Normalize(
+        #        mean=[0.485, 0.456, 0.406],
+        #        std=[0.229, 0.224, 0.225])])
 
     def __len__(self):
         return len(self.data_encoded)
@@ -49,11 +59,25 @@ class VQADataset(torch.utils.data.Dataset):
         answer      = data['answer']
         image_id    = data['image_id']
         question_id = data['question_id']
-        image_filename = self.mode + "2014/COCO_"+self.mode+"2014_"+str(image_id).zfill(12)+".jpg"
-        img = Image.open(self.filebase + image_filename)
-        img = img.convert('RGB')
-        img = self.transforms(img)
-        return torch.from_numpy(np.array(question)), img, image_id, answer, question_id
+        #image_filename = self.mode + "2014/COCO_"+self.mode+"2014_"+str(image_id).zfill(12)+".jpg"
+        #img = Image.open(self.filebase + image_filename)
+        #img = img.convert('RGB')
+        #img = self.transforms(img)
+        #return torch.from_numpy(np.array(question)), img, image_id, answer, question_id
+
+        #img_feature_filename = 'preprocessed/img_feature_'+self.mode+'/'+str(image_id).zfill(12)+'.pkl'
+        #with open(img_feature_filename, 'rb') as f: img_feature = pickle.load(f)
+        img_feature_filename = 'preprocessed/img_vgg16feature_'+self.mode+'/'+str(image_id).zfill(12)+'.pt'
+
+        img_feature = torch.load(img_feature_filename)
+        ##tmp sasaki
+        #try:
+        #    img_feature = torch.load(img_feature_filename)
+        #except:
+        #    print(img_feature_filename)
+        #    img_feature_filename = 'preprocessed/img_vgg16feature_'+self.mode+'/'+str(25).zfill(12)+'.pt'
+        #    img_feature = torch.load(img_feature_filename) #dummy
+        return torch.from_numpy(np.array(question)), img_feature, image_id, answer, question_id
 
     def _read_data(self, mode="train"):
         data = []
@@ -65,7 +89,6 @@ class VQADataset(torch.utils.data.Dataset):
             data_annotation = json.load(f)
         for i in range(len(data_annotation['annotations'])):
             image_id = data_question['questions'][i]["image_id"]
-            #image_filename = mode + "2014/COCO_"+mode+"2014_"+str(image_id).zfill(12)+".jpg"
             data.append({'question':data_question['questions'][i]['question'], 
                          'annotation': data_annotation['annotations'][i]['answers'][0]['answer'],
                          'image_id': image_id,
@@ -107,9 +130,71 @@ class VQADataset(torch.utils.data.Dataset):
                                  'question_id': i['question_id']})
         return data_encoded
 
-#vqa_dataset_train = VQADataset('train')
-#print(vqa_dataset_train[0])
+    def _preprocess(self):
+        print('preprocessing vocab and train/val images...')
+        data_train = self._read_data("train") 
+        data_val = self._read_data("val") 
 
+        ques_vocab, wtoi_question, ans_vocab, wtoi_answer  = self._build_vocab(data_train)
+        with open('preprocessed/itow_question.json', 'w') as f: json.dump(ques_vocab,    f, indent=4)
+        with open('preprocessed/wtoi_question.json', 'w') as f: json.dump(wtoi_question, f, indent=4)
+        with open('preprocessed/itow_answer.json',   'w') as f: json.dump(ans_vocab,     f, indent=4)
+        with open('preprocessed/wtoi_answer.json',   'w') as f: json.dump(wtoi_answer,   f, indent=4)
+        print('vocab preprocessed.')
+
+        img_scale=(256, 256)
+        img_crop=224
+        transform = transforms.Compose([
+            transforms.Resize(img_scale), #transforms.Scale(img_scale), #sasaki
+            transforms.CenterCrop(img_crop),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=[0.485, 0.456, 0.406],
+                std=[0.229, 0.224, 0.225])])
+        
+        device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        print("device:", device)
+        extractor = models.vgg16(pretrained=True)
+        for param in extractor.parameters():
+            param.requires_grad = False
+        extactor_fc_layers = list(extractor.classifier.children())[:-1]
+        #if image_channel_type.lower() == 'normi':
+        #    extactor_fc_layers.append(Normalize(p=2))
+        extractor.classifier = nn.Sequential(*extactor_fc_layers)
+        extractor.to(device)
+
+        for mode in ['train', 'val']:
+            print('preprocessing '+mode+' image features...')
+            if mode == 'train': data = data_train
+            elif mode == 'val': data = data_val
+
+            batch_size = 500
+            image_id_done = set([])
+            for i in range(0,len(data),batch_size):
+                imgs = []
+                image_ids = []
+                end = min(i+batch_size, len(data))
+                for j in range(i, end):
+                    image_id = data[j]['image_id']
+                    if image_id in image_id_done: continue
+                    image_id_done.add(image_id)
+                    image_filename = mode + "2014/COCO_"+mode+"2014_"+str(image_id).zfill(12)+".jpg"
+                    img = Image.open(self.filebase + image_filename)
+                    img = img.convert('RGB')
+                    img = transform(img)
+                    imgs.append(img)
+                    image_ids.append(image_id)
+                imgs = torch.stack(imgs)
+                imgs = imgs.to(device)
+                imgs_feature = extractor(imgs)
+                imgs_feature = imgs_feature.cpu()
+                for j in range(len(image_ids)):
+                    image_id = image_ids[j]
+                    img_feature = torch.squeeze(imgs_feature[j])
+                    img_feature_filename = 'preprocessed/img_vgg16feature_'+mode+'/'+str(image_id).zfill(12)+'.pt'
+                    torch.save(img_feature, img_feature_filename)
+            print(mode+' image features preprocessed.')
+        
 class RandomSampler:
     def __init__(self,data_source,batch_size):
         #self.lengths = [ex[2] for ex in data_source.examples] #sasaki

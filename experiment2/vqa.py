@@ -17,34 +17,18 @@ class Normalize(nn.Module):
 
 
 class ImageEmbedding(nn.Module):
-    def __init__(self, image_channel_type='I', output_size=1024, mode='train',
-                 extract_features=False, features_dir=None):
+    def __init__(self, image_channel_type='I', output_size=1024):
         super(ImageEmbedding, self).__init__()
-        self.extractor = models.vgg16(pretrained=True)
-        # freeze feature extractor (VGGNet) parameters
-        for param in self.extractor.parameters():
-            param.requires_grad = False
 
-        extactor_fc_layers = list(self.extractor.classifier.children())[:-1]
-        if image_channel_type.lower() == 'normi':
-            extactor_fc_layers.append(Normalize(p=2))
-        self.extractor.classifier = nn.Sequential(*extactor_fc_layers)
+        # feature extraction is done in preprocessing
 
         self.fflayer = nn.Sequential(
             nn.Linear(4096, output_size),
             nn.Tanh())
 
-        # TODO: Get rid of this hack
-        self.mode = mode
-        self.extract_features = extract_features
-        self.features_dir = features_dir
-
     def forward(self, image, image_ids):
-        # Pdb().set_trace()
-        if not self.extract_features:
-            image = self.extractor(image)
-            if self.features_dir is not None:
-                utils.save_image_features(image, image_ids, self.features_dir)
+
+        # feature extraction is done in preprocessing
 
         image_embedding = self.fflayer(image)
         return image_embedding
@@ -84,12 +68,10 @@ class QuesEmbedding(nn.Module):
 
 class VQAModel(nn.Module):
 
-    def __init__(self, vocab_size=10000, word_emb_size=300, emb_size=1024, output_size=1000, image_channel_type='I', mode='train', extract_img_features=True, features_dir=None):
+    def __init__(self, vocab_size=10000, word_emb_size=300, emb_size=1024, output_size=1000, image_channel_type='I'):
         super(VQAModel, self).__init__()
-        self.mode = mode
         self.word_emb_size = word_emb_size
-        self.image_channel = ImageEmbedding(image_channel_type, output_size=emb_size, mode=mode,
-                                            extract_features=extract_img_features, features_dir=features_dir)
+        self.image_channel = ImageEmbedding(image_channel_type, output_size=emb_size)
 
         # NOTE the padding_idx below.
         self.word_embeddings = nn.Embedding(vocab_size, word_emb_size)
@@ -103,7 +85,6 @@ class VQAModel(nn.Module):
             nn.Tanh(),
             nn.Linear(1000, output_size))
         # the original model has "use_mutan" option
-        
 
     def forward(self, images, questions, image_ids):
         image_embeddings = self.image_channel(images, image_ids)

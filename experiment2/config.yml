@@ -1,0 +1,35 @@
+save_dir: 'scratch/vqa_sgd'
+use_gpu: True
+data:
+    preprocess: False   # True/False - whether to preprocess vqa data files
+    batch_size: 32
+    num_workers: 4
+model:
+    params:
+        word_emb_size: 300
+        emb_size: 1024
+        image_channel_type: 'I'     # I/norm I
+    reload: 'checkpoints.pth.tar'
+optim:
+    #class: sgd      # sgd/rmsprop/adam
+    scheduler: 'CustomReduceLROnPlateau'
+    scheduler_params:
+        maxPatienceToStopTraining: 16
+        base_class_params:
+            mode: 'min'
+            factor: 0.5
+            patience: 7
+            verbose: True 
+            threshold: 0.02 
+            threshold_mode: 'rel' 
+            cooldown: 0 
+            min_lr: 0.00001
+            eps: 0.000001
+    params: 
+        momentum: 0.9
+        lr: 0.01      # learning rate
+        # alpha: 0.99     # alpha for adagrad/rmsprop/momentum/adam
+        # beta: 0.995     # beta used for adam
+        # eps: 0.00001       # epsilon that goes into denominator in rmsprop
+        weight_decay: 0.0005
+    n_epochs: 100
