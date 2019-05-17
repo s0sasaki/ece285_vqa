@@ -13,13 +13,6 @@ from PIL import Image
 class VQADataset(torch.utils.data.Dataset):
 
     filebase = '/datasets/ee285f-public/VQA2017/'
-    #filename = 'v2_OpenEnded_mscoco_test2015_questions.json'
-    #filename = 'v2_mscoco_val2014_annotations.json'
-    #filename = 'v2_OpenEnded_mscoco_test-dev2015_questions.json'
-    #filename = 'v2_OpenEnded_mscoco_val2014_questions.json'
-    #filename = 'v2_OpenEnded_mscoco_train2014_questions.json'
-    #filename = 'v2_mscoco_train2014_annotations.json'
-
     ques_vocab = {}
     ans_vocab = {}
     wtoi_question = {}
@@ -29,8 +22,6 @@ class VQADataset(torch.utils.data.Dataset):
         if len(VQADataset.ques_vocab) == 0:
             if preprocess:
                 self._preprocess()
-            #data_train = self._read_data("train") 
-            #VQADataset.ques_vocab, VQADataset.wtoi_question, VQADataset.ans_vocab, VQADataset.wtoi_answer  = self._build_vocab(data_train)
             with open('preprocessed/itow_question.json', 'r') as f: VQADataset.ques_vocab    = json.load(f)
             with open('preprocessed/wtoi_question.json', 'r') as f: VQADataset.wtoi_question = json.load(f)
             with open('preprocessed/itow_answer.json',   'r') as f: VQADataset.ans_vocab     = json.load(f)
@@ -40,43 +31,17 @@ class VQADataset(torch.utils.data.Dataset):
         self.data = self._read_data(mode)
         self.data_encoded = self._data_encoder(self.data, VQADataset.wtoi_question, VQADataset.wtoi_answer)
 
-        #img_scale=(256, 256)
-        #img_crop=224
-        #self.transforms = transforms.Compose([
-        #    transforms.Resize(img_scale), #transforms.Scale(img_scale), #sasaki
-        #    transforms.CenterCrop(img_crop),
-        #    transforms.ToTensor(),
-        #    transforms.Normalize(
-        #        mean=[0.485, 0.456, 0.406],
-        #        std=[0.229, 0.224, 0.225])])
-
     def __len__(self):
         return len(self.data_encoded)
 
-    def __getitem__(self, idx): # This is pretty slow. Needs to torch.load() the preprocessed data. (Ref: dataset_save.py)
+    def __getitem__(self, idx): 
         data = self.data_encoded[idx]
         question    = data['question']
         answer      = data['answer']
         image_id    = data['image_id']
         question_id = data['question_id']
-        #image_filename = self.mode + "2014/COCO_"+self.mode+"2014_"+str(image_id).zfill(12)+".jpg"
-        #img = Image.open(self.filebase + image_filename)
-        #img = img.convert('RGB')
-        #img = self.transforms(img)
-        #return torch.from_numpy(np.array(question)), img, image_id, answer, question_id
-
-        #img_feature_filename = 'preprocessed/img_feature_'+self.mode+'/'+str(image_id).zfill(12)+'.pkl'
-        #with open(img_feature_filename, 'rb') as f: img_feature = pickle.load(f)
         img_feature_filename = 'preprocessed/img_vgg16feature_'+self.mode+'/'+str(image_id).zfill(12)+'.pt'
-
         img_feature = torch.load(img_feature_filename)
-        ##tmp sasaki
-        #try:
-        #    img_feature = torch.load(img_feature_filename)
-        #except:
-        #    print(img_feature_filename)
-        #    img_feature_filename = 'preprocessed/img_vgg16feature_'+self.mode+'/'+str(25).zfill(12)+'.pt'
-        #    img_feature = torch.load(img_feature_filename) #dummy
         return torch.from_numpy(np.array(question)), img_feature, image_id, answer, question_id
 
     def _read_data(self, mode="train"):
