@@ -76,9 +76,9 @@ class VQADataset(torch.utils.data.Dataset):
         wtoi_question = {       w:i+1 for i,(w,f) in enumerate(vocab_question_ordered)}
         itow_answer   = {str(i+1):w   for i,(w,f) in enumerate(vocab_answer_ordered)}
         wtoi_answer   = {       w:i+1 for i,(w,f) in enumerate(vocab_answer_ordered)}
-        itow_question[0] = '<UNK>'
+        itow_question[str(0)] = '<UNK>'
         wtoi_question['<UNK>'] = 0
-        itow_answer[0] = '<UNK>'
+        itow_answer[str(0)] = '<UNK>'
         wtoi_answer['<UNK>'] = 0
         return itow_question, wtoi_question, itow_answer, wtoi_answer
     
