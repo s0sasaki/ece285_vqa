@@ -1,4 +1,5 @@
 *.pt
 *.json
-experiment2/__pychache__
-scratch
+experiment2/__pycache__
+experiment2/scratch
+experiment2/results

@@ -118,7 +118,7 @@ class VQADataset(torch.utils.data.Dataset):
                 std=[0.229, 0.224, 0.225])])
         
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        print("device:", device)
+        print("preprocessing on device:", device)
         extractor = models.vgg16(pretrained=True)
         for param in extractor.parameters():
             param.requires_grad = False

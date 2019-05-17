@@ -6,6 +6,7 @@ To execute the code, try these at the experiment2 directory:
 
 ```
 pip install --user -r requirements.txt
+mkdir results
 mkdir preprocessed
 mkdir preprocessed/img_vgg16feature_train
 mkdir preprocessed/img_vgg16feature_val

@@ -11,7 +11,6 @@ from IPython.core.debugger import Pdb
 from dataset import VQADataset, VQABatchSampler
 from train import train_model
 from vqa import VQAModel
-from scheduler import CustomReduceLROnPlateau
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--config', type=str, default='config.yml')
@@ -31,15 +30,15 @@ def main(config):
     dataloaders, ques_vocab, ans_vocab = load_datasets(config, phases)
 
     config['model']['params']['vocab_size'] = len(ques_vocab)
-    config['model']['params']['output_size'] = len(ans_vocab) #sasaki # originally len(ans_vocab)-1 
+    config['model']['params']['output_size'] = len(ans_vocab) # originally len(ans_vocab)-1 
 
     model = VQAModel(**config['model']['params']) 
     print(model)
+
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.SGD(filter(lambda p: p.requires_grad, model.parameters()), **config['optim']['params']) 
-    # the original code has 'class' (SGD/RMSprop/Adam) options
 
-    best_acc = 0 #sasaki
+    best_acc = 0
     startEpoch = 0
     if 'reload' in config['model']:
         pathForTrainedModel = os.path.join(config['save_dir'], config['model']['reload'])
@@ -49,29 +48,19 @@ def main(config):
             startEpoch = checkpoint['epoch']
             model.load_state_dict(checkpoint['state_dict'])
             # optimizer.load_state_dict(checkpoint['optimizer'])
-    if config['use_gpu']:
-        model = model.cuda()
 
     save_dir = os.path.join(os.getcwd(), config['save_dir'])
+    scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1) # Should these params be tuned?
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    model.to(device)
 
-    if 'scheduler' in config['optim'] and config['optim']['scheduler'].lower() == 'CustomReduceLROnPlateau'.lower():
-        print('CustomReduceLROnPlateau')
-        exp_lr_scheduler = CustomReduceLROnPlateau(
-            optimizer, config['optim']['scheduler_params']['maxPatienceToStopTraining'], config['optim']['scheduler_params']['base_class_params'])
-    else:
-        # Decay LR by a factor of gamma every step_size epochs
-        print('lr_scheduler.StepLR')
-        exp_lr_scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
-
-    print("begin training")
-    model = train_model(model, dataloaders, criterion, optimizer, exp_lr_scheduler, save_dir,
-                        num_epochs=config['optim']['n_epochs'], use_gpu=config['use_gpu'], best_accuracy=best_acc, start_epoch=startEpoch)
+    print("begin training on device:", device)
+    model = train_model(model, dataloaders, criterion, optimizer, scheduler, save_dir,
+                        num_epochs=config['optim']['n_epochs'], device=device, best_accuracy=best_acc, start_epoch=startEpoch)
 
 if __name__ == '__main__':
     global args
     args = parser.parse_args()
     args.config = os.path.join(os.getcwd(), args.config)
     config = yaml.load(open(args.config))
-    config['use_gpu'] = config['use_gpu'] and torch.cuda.is_available()
-
     main(config)
