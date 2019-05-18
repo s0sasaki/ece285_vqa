@@ -106,12 +106,7 @@ def train_model(model, data_loaders, criterion, optimizer, scheduler, save_dir, 
             best_acc = val_acc
             best_model_wts = model.state_dict()
 
-        save_checkpoint(save_dir, {
-            'epoch': epoch,
-            'best_acc': best_acc,
-            'state_dict': model.state_dict(),
-            # 'optimizer': optimizer.state_dict(),
-        }, is_best)
+        save_checkpoint(save_dir, {'epoch':epoch, 'best_acc':best_acc, 'state_dict':model.state_dict()}, is_best)
 
         writer.export_scalars_to_json(save_dir + "/all_scalars.json")
         scheduler.step()
@@ -130,8 +125,8 @@ def train_model(model, data_loaders, criterion, optimizer, scheduler, save_dir, 
 
 
 def save_checkpoint(save_dir, state, is_best):
-    savepath = save_dir + '/' + 'checkpoint.pth.tar'
+    savepath = save_dir + '/checkpoint.pth.tar'
     torch.save(state, savepath)
     if is_best:
-        shutil.copyfile(savepath, save_dir + '/' + 'model_best.pth.tar')
+        shutil.copyfile(savepath, save_dir + '/model_best.pth.tar')
 

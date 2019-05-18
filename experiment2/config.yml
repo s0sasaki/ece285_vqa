@@ -8,7 +8,7 @@ model:
         word_emb_size: 300
         emb_size: 1024
         image_channel_type: 'I'     # I/norm I
-    reload: 'checkpoints.pth.tar'
+    reload: 'checkpoint.pth.tar'
 optim:
     params: 
         momentum: 0.9

@@ -39,15 +39,20 @@ def main(config):
     optimizer = optim.SGD(filter(lambda p: p.requires_grad, model.parameters()), **config['optim']['params']) 
 
     best_acc = 0
-    startEpoch = 0
+    start_epoch = 0
+    print(config['model'])
+
     if 'reload' in config['model']:
-        pathForTrainedModel = os.path.join(config['save_dir'], config['model']['reload'])
-        if os.path.exists(pathForTrainedModel):
-            print("=> loading checkpoint/model found at '{0}'".format(pathForTrainedModel))
-            checkpoint = torch.load(pathForTrainedModel)
-            startEpoch = checkpoint['epoch']
+        checkpoint_model_filename = os.path.join(config['save_dir'], config['model']['reload'])
+        if os.path.exists(checkpoint_model_filename):
+            print("=> loading checkpoint/model found at '{0}'".format(checkpoint_model_filename))
+            checkpoint = torch.load(checkpoint_model_filename)
             model.load_state_dict(checkpoint['state_dict'])
+            start_epoch = checkpoint['epoch'] + 1
+            best_acc = checkpoint['best_acc']
             # optimizer.load_state_dict(checkpoint['optimizer'])
+        else:
+            print("checkpoint/model file (",checkpoint_model_filename,") does not exist.")
 
     save_dir = os.path.join(os.getcwd(), config['save_dir'])
     scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1) # Should these params be tuned?
@@ -56,7 +61,7 @@ def main(config):
 
     print("begin training on device:", device)
     model = train_model(model, dataloaders, criterion, optimizer, scheduler, save_dir,
-                        num_epochs=config['optim']['n_epochs'], device=device, best_accuracy=best_acc, start_epoch=startEpoch)
+                        num_epochs=config['optim']['n_epochs'], device=device, best_accuracy=best_acc, start_epoch=start_epoch)
 
 if __name__ == '__main__':
     global args

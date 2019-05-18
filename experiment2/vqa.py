@@ -60,8 +60,7 @@ class QuesEmbedding(nn.Module):
         ques_embedding = lstm_embedding[0]
         if self.lstm.num_layers > 1 or self.bidirectional:
             for i in range(1, self.lstm.num_layers):
-                ques_embedding = torch.cat(
-                    [ques_embedding, lstm_embedding[i]], dim=1)
+                ques_embedding = torch.cat([ques_embedding, lstm_embedding[i]], dim=1)
             ques_embedding = self.fflayer(ques_embedding)
         return ques_embedding
 
@@ -75,8 +74,7 @@ class VQAModel(nn.Module):
 
         # NOTE the padding_idx below.
         self.word_embeddings = nn.Embedding(vocab_size, word_emb_size)
-        self.ques_channel = QuesEmbedding(
-            input_size=word_emb_size, output_size=emb_size, num_layers=1, batch_first=False)
+        self.ques_channel = QuesEmbedding(input_size=word_emb_size, output_size=emb_size, num_layers=1, batch_first=False)
         # the original model has "deeplstm" option
 
         self.mlp = nn.Sequential(
