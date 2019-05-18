@@ -40,19 +40,17 @@ def main(config):
 
     best_acc = 0
     start_epoch = 0
-    print(config['model'])
-
     if 'reload' in config['model']:
         checkpoint_model_filename = os.path.join(config['save_dir'], config['model']['reload'])
         if os.path.exists(checkpoint_model_filename):
             print("=> loading checkpoint/model found at '{0}'".format(checkpoint_model_filename))
             checkpoint = torch.load(checkpoint_model_filename)
             model.load_state_dict(checkpoint['state_dict'])
+            optimizer.load_state_dict(checkpoint['optimizer'])
             start_epoch = checkpoint['epoch'] + 1
             best_acc = checkpoint['best_acc']
-            # optimizer.load_state_dict(checkpoint['optimizer'])
         else:
-            print("checkpoint/model file (",checkpoint_model_filename,") does not exist.")
+            print("Cannot find checkpoint model file:", checkpoint_model_filename)
 
     save_dir = os.path.join(os.getcwd(), config['save_dir'])
     scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1) # Should these params be tuned?

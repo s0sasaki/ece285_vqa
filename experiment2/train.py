@@ -106,20 +106,25 @@ def train_model(model, data_loaders, criterion, optimizer, scheduler, save_dir, 
             best_acc = val_acc
             best_model_wts = model.state_dict()
 
-        save_checkpoint(save_dir, {'epoch':epoch, 'best_acc':best_acc, 'state_dict':model.state_dict()}, is_best)
+        state = {'epoch':epoch, 
+                 'best_acc':best_acc, 
+                 'state_dict':model.state_dict(), 
+                 "optimizer":optimizer.state_dict()}
+        save_checkpoint(save_dir, state, is_best)
 
         writer.export_scalars_to_json(save_dir + "/all_scalars.json")
         scheduler.step()
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
-    print('Best val Acc: {:4f}'.format(best_acc))
-    # load best model weights
-    model.load_state_dict(best_model_wts)
 
     # export scalar data to JSON for external processing
     writer.export_scalars_to_json(save_dir + "/all_scalars.json")
     writer.close()
+
+    # load best model weights
+    print('Best val Acc: {:4f}'.format(best_acc))
+    model.load_state_dict(best_model_wts)
 
     return model
 
