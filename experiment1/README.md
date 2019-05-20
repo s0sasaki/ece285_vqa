@@ -5,7 +5,7 @@
 1) get a 64G pod on python 2:
 launch-pytorch-gpu.sh -m 64
 
-2) close this folder on your account :
+2) clone this folder on your account :
 clone git address
 
 3)
