@@ -1,28 +1,37 @@
-from Sina
+**********************************************from Sina
+
+
 # How to run 
-get a 64G pod on python 2:
+1) get a 64G pod on python 2:
 launch-pytorch-gpu.sh -m 64
 
-close this folder on your account :
+2) close this folder on your account :
 clone git address
 
+3)
 cd Experiment1
+
+4)
 sh tools/download.sh
 sh tools/process.sh
 
-run these 2 lines to get pytorch 0.3.0 :
+
+5) run these 2 lines to get pytorch 0.3.0 :
 conda create -n env python=2.7 mkl=2018 pytorch=0.3.0 -c pytorch -c intel
 source activate env
 
-now you are inside env istall these libraries:
+6) now you are inside env istall these libraries:
 pip install --user pillow
 pip instal --user h5py
 
-run the main :
+7) run the main :
 pyhton main.py
 
+Finish.
 
-##### Prerequisites
+
+
+### Prerequisites
 
 Make sure you are on a machine with a NVIDIA GPU and Python 2 with about 70 GB disk space.
 
@@ -30,7 +39,9 @@ Make sure you are on a machine with a NVIDIA GPU and Python 2 with about 70 GB d
 2. Install [h5py](http://docs.h5py.org/en/latest/build.html).
 
 
-from main page:
+***********************************************************from main page:
+
+
 ## Bottom-Up and Top-Down Attention for Visual Question Answering
 
 An efficient PyTorch implementation of the winning entry of the [2017 VQA Challenge](http://www.visualqa.org/challenge.html).
