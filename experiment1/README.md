@@ -27,7 +27,7 @@ pip instal --user h5py
 7) run the main :
 pyhton main.py
 
-Finish.
+Enjoy your life.
 
 
 
