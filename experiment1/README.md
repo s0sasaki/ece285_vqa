@@ -8,7 +8,7 @@ launch-pytorch-gpu.sh -m 64
 2) clone this folder on your account :
 clone git address
 
-3)cd Experiment1
+3) $ cd Experiment1
 
 4)
 $ sh tools/download.sh
@@ -17,15 +17,20 @@ $ sh tools/process.sh
 
 
 5) run these 2 lines to get pytorch 0.3.0 :
-conda create -n env python=2.7 mkl=2018 pytorch=0.3.0 -c pytorch -c intel
-source activate env
+
+$ conda create -n env python=2.7 mkl=2018 pytorch=0.3.0 -c pytorch -c intel
+
+$ source activate env
 
 6) now you are inside env istall these libraries:
-pip install --user pillow
-pip instal --user h5py
+
+$ pip install --user pillow
+
+$ pip instal --user h5py
 
 7) run the main :
-pyhton main.py
+
+$ pyhton main.py
 
 Enjoy your life.
 
