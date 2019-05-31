@@ -39,3 +39,32 @@ In order to speed up the training, it's possible to preprocess the images in the
 [MUTAN: Multimodal Tucker Fusion for Visual Question Answering]: https://arxiv.org/abs/1705.06676
 [http://visualqa.org/download.html]: http://visualqa.org/download.html
 [config/]: https://github.com/Shivanshu-Gupta/Visual-Question-Answering/config
+
+We require the following for the below error:
+
+pip install --user -U protobuf
+
+abati@abati-23031:~/ECE285/experiment2$ cat RESULTTXT
+nohup: ignoring input
+Traceback (most recent call last):
+  File "main.py", line 12, in <module>
+    from train import train_model
+  File "/datasets/home/home-02/59/659/abati/ECE285/experiment2/train.py", line 3, in <module>
+    from tensorboardX import SummaryWriter #sasaki
+  File "/datasets/home/59/659/abati/.local/lib/python2.7/site-packages/tensorboardX/__init__.py", line 5, in <module>
+    from .torchvis import TorchVis
+  File "/datasets/home/59/659/abati/.local/lib/python2.7/site-packages/tensorboardX/torchvis.py", line 11, in <module>
+    from .writer import SummaryWriter
+  File "/datasets/home/59/659/abati/.local/lib/python2.7/site-packages/tensorboardX/writer.py", line 27, in <module>
+    from .event_file_writer import EventFileWriter
+  File "/datasets/home/59/659/abati/.local/lib/python2.7/site-packages/tensorboardX/event_file_writer.py", line 28, in <module>
+    from .proto import event_pb2
+  File "/datasets/home/59/659/abati/.local/lib/python2.7/site-packages/tensorboardX/proto/event_pb2.py", line 15, in <module>
+    from tensorboardX.proto import summary_pb2 as tensorboardX_dot_proto_dot_summary__pb2
+  File "/datasets/home/59/659/abati/.local/lib/python2.7/site-packages/tensorboardX/proto/summary_pb2.py", line 15, in <module>
+    from tensorboardX.proto import tensor_pb2 as tensorboardX_dot_proto_dot_tensor__pb2
+  File "/datasets/home/59/659/abati/.local/lib/python2.7/site-packages/tensorboardX/proto/tensor_pb2.py", line 15, in <module>
+    from tensorboardX.proto import resource_handle_pb2 as tensorboardX_dot_proto_dot_resource__handle__pb2
+  File "/datasets/home/59/659/abati/.local/lib/python2.7/site-packages/tensorboardX/proto/resource_handle_pb2.py", line 22, in <module>
+    serialized_pb=_b('\n(tensorboardX/proto/resource_handle.proto\x12\x0ctensorboardX\"r\n\x13ResourceHandleProto\x12\x0e\n\x06\x64\x65vice\x18\x01 \x01(\t\x12\x11\n\tcontainer\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x11\n\thash_code\x18\x04 \x01(\x04\x12\x17\n\x0fmaybe_type_name\x18\x05 \x01(\tB/\n\x18org.tensorflow.frameworkB\x0eResourceHandleP\x01\xf8\x01\x01\x62\x06proto3')
+TypeError: __new__() got an unexpected keyword argument 'serialized_options'
