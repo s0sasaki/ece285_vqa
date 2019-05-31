@@ -2,7 +2,7 @@ save_dir: 'scratch/vqa_sgd'
 data:
     preprocess: False   # True/False - whether to preprocess vqa data files
     batch_size: 32
-    num_workers: 4
+    num_workers: 16
 model:
     params:
         word_emb_size: 300

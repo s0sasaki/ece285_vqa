@@ -1,5 +1,6 @@
 *.pt
 *.json
+*.pyc
 experiment2/__pycache__
 experiment2/scratch
 experiment2/results
