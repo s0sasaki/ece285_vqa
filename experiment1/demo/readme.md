@@ -1,4 +1,4 @@
-To run this Demo you have to opetions:
+To run this Demo you have 2 options:
 
 1. 
 If you want to see the result of our trained network on some samples use this option:
