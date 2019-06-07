@@ -1,10 +1,15 @@
-# Note (by Sasaki)
+# Experiment2
 
-This is another implementation of VQA based on https://github.com/Shivanshu-Gupta/Visual-Question-Answering.
+## Description 
 
-To execute the code, try these at the experiment2 directory:
+The experiment2 is a vanilla VQA implementation. These scripts are originally from https://github.com/Shivanshu-Gupta/Visual-Question-Answering, but they are significantly modified. 
+
+## Requirements and Usage
+
+Use python 3.7 and install packages torchtext, tensorboardX, and utils. To execute the code, run the followings:
 
 ```
+cd experiment2
 pip install --user -r requirements.txt
 mkdir results
 mkdir preprocessed
@@ -15,27 +20,27 @@ python main.py -c config.yml
 
 To skip preprocessing after the first execution, disable 'preprocess' in the config file.
 
-The followings are the original README:
+The experiment2 does not include demo scripts.
 
-# Visual-Question-Answering
-This repository contains an AI system for the task of **[Visual Question Answering]**: given an image and a question related to the image in natural language, the systems answer the question in natural language from the image scene. The system can be configured to use one of 3 different underlying models:
 
-1. **VQA**: This is the *baseline model* given in the paper [VQA: Visual Question Answering]. It encodes the image by a CNN and the question by an LSTM and then combines these for VQA task. It uses *pretrained vgg16* to get the image embedding (may be further normalised), and a 1 or 2-layered LSTM for the question embedding.
-2. **SAN**: This is an *attention based model* described in the paper [Stacked Attention Networks for Image Question Answering]. It incorporates attention on the input image.
-3. **MUTAN**: This is a variant of the VQA model where instead of a simple of pointwise-product, the image and question embedding are combined using a a special *Multimodal Tucker fusion* technique described in the paper [MUTAN: Multimodal Tucker Fusion for Visual Question Answering].
+## Code organization 
 
-## Usage
-First download the datasets from [http://visualqa.org/download.html] - all items under *Balanced Real Images* except *Complementary Pairs List*. 
-```sh
-python main.py --config <config_file_path>
-```
-The system takes its arguments from the config file that it takes as input. Sample config files have been provided in [config/].
+ - experiment2: An implementation for a vanilla VQA.
+ - experiment2/main.py: Main script to manage the training and validation of the model
+ - experiment2/train.py: Module for training and validation
+ - experiment2/vqa.py:  Module for the neural network architecture
+ - experiment2/dataset.py: Module for data loading
+ - experiment2/config.yml: Configuration file
+ - experiment2/requirements.txt: List of the requirements
+ - experiment2/README.md: Other information
 
-In order to speed up the training, it's possible to preprocess the images in the dataset and store the image embeddings by setting the *emb_dir* and *preprocess* flag.
 
-[Visual Question Answering]: https://vqa.cloudcv.org/
-[VQA: Visual Question Answering]: https://arxiv.org/abs/1505.00468
-[Stacked Attention Networks for Image Question Answering]: https://arxiv.org/pdf/1511.02274
-[MUTAN: Multimodal Tucker Fusion for Visual Question Answering]: https://arxiv.org/abs/1705.06676
-[http://visualqa.org/download.html]: http://visualqa.org/download.html
-[config/]: https://github.com/Shivanshu-Gupta/Visual-Question-Answering/config
+## Referenced sites and papers
+
+ - https://github.com/Shivanshu-Gupta/Visual-Question-Answering
+ - https://vqa.cloudcv.org/
+ - https://arxiv.org/abs/1505.00468
+ - https://arxiv.org/pdf/1511.02274
+ - https://arxiv.org/abs/1705.06676
+ - http://visualqa.org/download.html
+ - https://github.com/Shivanshu-Gupta/Visual-Question-Answering/config
