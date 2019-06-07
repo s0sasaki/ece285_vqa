@@ -62,34 +62,34 @@ The experiment2 does not include demo scripts or trained model parameters.
 ### experiment1
 
  - experiment1: An implementation for Bottom-Up and Top-Down Attention for VQA
- - experiment1/main.py: 
- - experiment1/train.py: 
- - experiment1/language_model.py: 
- - experiment1/fc.py: 
- - experiment1/dataset.py: 
- - experiment1/base_model.py: 
- - experiment1/attention.py: 
- - experiment1/utils.py: 
- - experiment1/demo: 
- - experiment1/demo/Demo.ipynb: 
- - experiment1/demo/demo.py: 
- - experiment1/demo/base_model.py: 
- - experiment1/demo/glove6b_init_300d.npy: 
- - experiment1/demo/model.pth: 
- - experiment1/demo/our_answers.dms: 
- - experiment1/demo/readme.md: 
- - experiment1/demo/test.dms: 
- - experiment1/demo/trainval_label2ans.pkl: 
- - experiment1/tools: 
- - experiment1/tools/compute_softscore.py: 
- - experiment1/tools/create_dictionary.py: 
- - experiment1/tools/detection_features_converter.py: 
- - experiment1/tools/download.sh: 
- - experiment1/tools/process.sh: 
- - experiment1/data: 
- - experiment1/data/train_ids.pkl: 
- - experiment1/data/val_ids.pkl: 
- - experiment1/README.md: 
+ - experiment1/main.py: Main script to set up models and dataloaders and run training module
+ - experiment1/train.py: Module for training and evaluation
+ - experiment1/base_model.py: Module for BaseModel, which controls WordEmbedding, QuestionEmbedding, Attention, FCnet, and classifier
+ - experiment1/language_model.py: Module for WordEmbedding and QuestionEmbedding
+ - experiment1/fc.py: Module for fully-connected network part
+ - experiment1/attention.py: Module for Attention
+ - experiment1/dataset.py: Module for dictionary and dataloading
+ - experiment1/utils.py: Module for utility scripts
+ - experiment1/demo: Files related to demo
+ - experiment1/demo/Demo.ipynb: Main notebook for demo 
+ - experiment1/demo/demo.py: Script to generate answers
+ - experiment1/demo/base_model.py: Module for BaseModel
+ - experiment1/demo/glove6b_init_300d.npy: Parameters for WordEmbedding
+ - experiment1/demo/model.pth: Trained model
+ - experiment1/demo/our_answers.dms: Result answers for sample questions
+ - experiment1/demo/test.dms: Image features for sample questions
+ - experiment1/demo/trainval_label2ans.pkl: Dictionary to decode answers
+ - experiment1/demo/readme.md: Other information for demo
+ - experiment1/tools: Files for preprocessing and downloading
+ - experiment1/tools/download.sh: Script to download raw image features
+ - experiment1/tools/process.sh: Script to run create_dictionary, compute_softscore, and detection_features_converter
+ - experiment1/tools/create_dictionary.py: Script to create dictionary
+ - experiment1/tools/compute_softscore.py: Script to compute softscore
+ - experiment1/tools/detection_features_converter.py: Script to generate detection features
+ - experiment1/data: Data files
+ - experiment1/data/train_ids.pkl: Indeces of training data
+ - experiment1/data/val_ids.pkl: Indeces of validation data
+ - experiment1/README.md: Information for experiment1
 
 ### experiment2
 
@@ -100,7 +100,7 @@ The experiment2 does not include demo scripts or trained model parameters.
  - experiment2/dataset.py: Module for data loading
  - experiment2/config.yml: Configuration file
  - experiment2/requirements.txt: List of the requirements
- - experiment2/README.md: Other information
+ - experiment2/README.md: Information for experiment2
 
 ### Miscellaneous scripts
 
