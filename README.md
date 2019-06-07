@@ -1,8 +1,10 @@
-# Description 
+# SAMS_VQA
 
-This is project ECE285_VQA developed by team SAMS composed of Arda Bati, Marjan Emadi, So Sasaki, and Sina Shahsavari. The repository mainly consists of two implementations of Visual Question Answering (VQA). The experiment1 is an implementation for Bottom-Up and Top-Down Attention for VQA, which our final report is based on. The experiment2 is a completely different implementation for a vanilla VQA. The details are on the README file in each experiment directory.  
+## Description 
 
-# Requirements and Usage
+This is project SAMS_VQA developed by team SAMS composed of Arda Bati, Marjan Emadi, So Sasaki, and Sina Shahsavari. The repository mainly consists of two implementations of Visual Question Answering (VQA). The experiment1 is an implementation for Bottom-Up and Top-Down Attention for VQA, which our final report is based on. The experiment2 is a completely different implementation for a vanilla VQA. The details are on the README file in each experiment directory.  
+
+## Requirements and Usage
 
 ### Experiment1
 
@@ -50,7 +52,7 @@ To skip preprocessing after the first execution, disable 'preprocess' in the con
 The experiment2 does not include demo scripts or trained model parameters.
 
 
-# Code organization 
+## Code organization 
 
  - experiment1: An implementation for Bottom-Up and Top-Down Attention for VQA
  - experiment1/main.py: 
