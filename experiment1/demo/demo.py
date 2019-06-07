@@ -1,3 +1,6 @@
+import sys
+sys.path.append("..")
+
 import argparse
 import torch
 import torch.nn as nn
@@ -18,7 +21,7 @@ model.w_emb.init_embedding(dict_pth3)
 model = nn.DataParallel(model).cuda()
 model.load_state_dict(torch.load('model.pth'))
 
-test_samples= open ('test','r')
+test_samples= open ('test.dms','r')
 tests=pickle.load(test_samples)
 test_samples.close()
 
@@ -31,6 +34,6 @@ for i in range(len(v)):
     preds.append(model(v[i].cuda(),b[i].cuda(),q[i].cuda(),None))
             
 
-file= open ('our_answers','w')
+file= open ('our_answers.dms','w')
 pickle.dump(preds,file)
 file.close()
