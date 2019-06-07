@@ -27,11 +27,15 @@ sh tools/process.sh
 python main.py
 ```
 
-For demonstration, run the demo script on jupyter notebook:
+For demonstration, unzip the trained model:
 ```
-experiment1/demo/Demo.ipyenb
+cd experiment1/demo
+unzip model.pth.zip
 ```
 
+Then run the demo script on jupyter notebook:
+
+- experiment1/demo/Demo.ipyenb
 
 ### Experiment2
 
