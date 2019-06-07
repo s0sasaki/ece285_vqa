@@ -31,7 +31,6 @@ python main.py
 For demonstration, you need the experiment results, our_answers.dms. This file is uploaded in experiment1/demo, but you can also generate it as follows:
 ```
 cd experiment1/demo
-unzip model.pth.zip
 python demo.py
 ```
 
@@ -60,9 +59,40 @@ The experiment2 does not include demo scripts or trained model parameters.
 
 ## Code organization 
 
+### experiment1
+
  - experiment1: An implementation for Bottom-Up and Top-Down Attention for VQA
  - experiment1/main.py: 
- - . . . 
+ - experiment1/train.py: 
+ - experiment1/language_model.py: 
+ - experiment1/fc.py: 
+ - experiment1/dataset.py: 
+ - experiment1/base_model.py: 
+ - experiment1/attention.py: 
+ - experiment1/utils.py: 
+ - experiment1/demo: 
+ - experiment1/demo/Demo.ipynb: 
+ - experiment1/demo/demo.py: 
+ - experiment1/demo/base_model.py: 
+ - experiment1/demo/glove6b_init_300d.npy: 
+ - experiment1/demo/model.pth: 
+ - experiment1/demo/our_answers.dms: 
+ - experiment1/demo/readme.md: 
+ - experiment1/demo/test.dms: 
+ - experiment1/demo/trainval_label2ans.pkl: 
+ - experiment1/tools: 
+ - experiment1/tools/compute_softscore.py: 
+ - experiment1/tools/create_dictionary.py: 
+ - experiment1/tools/detection_features_converter.py: 
+ - experiment1/tools/download.sh: 
+ - experiment1/tools/process.sh: 
+ - experiment1/data: 
+ - experiment1/data/train_ids.pkl: 
+ - experiment1/data/val_ids.pkl: 
+ - experiment1/README.md: 
+
+### experiment2
+
  - experiment2: An implementation for a vanilla VQA.
  - experiment2/main.py: Main script to manage the training and validation of the model
  - experiment2/train.py: Module for training and validation
@@ -71,6 +101,9 @@ The experiment2 does not include demo scripts or trained model parameters.
  - experiment2/config.yml: Configuration file
  - experiment2/requirements.txt: List of the requirements
  - experiment2/README.md: Other information
+
+### Miscellaneous scripts
+
  - misc: Miscellaneous scripts
  - misc/data_format_check.ipynb: Script for preliminary data visualization 
  - misc/some_useful_codes: Scripts which were not used after all
