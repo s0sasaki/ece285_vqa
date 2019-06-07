@@ -12,7 +12,7 @@ import os.path
 
 constructor = 'build_baseline0_newatt'
 model = getattr(base_model, constructor)( 1024).cuda()
-dict_pth3='/datasets/home/home-00/02/902/sshahsav/bottom-up-attention-vqa/data/glove6b_init_300d.npy'
+dict_pth3='./glove6b_init_300d.npy'
 model.w_emb.init_embedding(dict_pth3)
 
 model = nn.DataParallel(model).cuda()
