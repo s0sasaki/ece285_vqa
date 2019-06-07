@@ -13,9 +13,10 @@ The experiment1 requires 64G memory. To get sufficient resource on ing6 server, 
 launch-pytorch-gpu.sh -m 64
 ```
 
-Use python 2.7 and install packages pillow and h5py.
+Use python 2.7 and install packages pillow and h5py. Since CUDA (Version 8) and pytorch (0.3.1) of DSMLP Python 2.7 pod is imcompatible, you need to downgrade pytorch to 0.3.0. 
 ```
 conda create -n envname python=2.7 mkl=2018 pytorch=0.3.0 -c pytorch -c intel
+conda activate envname
 pip install --user pillow h5py
 ```
 
@@ -27,10 +28,11 @@ sh tools/process.sh
 python main.py
 ```
 
-For demonstration, unzip the trained model:
+For demonstration, you need the experiment results, our_answers.dms. This file is uploaded in experiment1/demo, but you can also generate it as follows:
 ```
 cd experiment1/demo
 unzip model.pth.zip
+python demo.py
 ```
 
 Then run the demo script on jupyter notebook:
