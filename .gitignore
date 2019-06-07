@@ -6,4 +6,5 @@ experiment2/scratch
 experiment2/results
 experiment2/preprocessed
 .DS_Store
-expriment1/.DS_Store
+experiment1/.DS_Store
+experiment1/demo/.ipynb_checkpoints

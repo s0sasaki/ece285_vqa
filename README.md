@@ -16,7 +16,7 @@ launch-pytorch-gpu.sh -m 64
 Use python 2.7 and install packages pillow and h5py. Since CUDA (Version 8) and pytorch (0.3.1) of DSMLP Python 2.7 pod is imcompatible, you need to downgrade pytorch to 0.3.0. 
 ```
 conda create -n envname python=2.7 mkl=2018 pytorch=0.3.0 -c pytorch -c intel
-conda activate envname
+source activate envname
 pip install --user pillow h5py
 ```
 
