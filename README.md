@@ -108,3 +108,24 @@ The experiment2 does not include demo scripts or trained model parameters.
  - misc/data_format_check.ipynb: Script for preliminary data visualization 
  - misc/some_useful_codes: Scripts which were not used after all
 
+
+
+## References
+
+### Experiment1
+
+ - https://arxiv.org/abs/1707.07998 
+ - https://github.com/hengyuan-hu/bottom-up-attention-vqa. 
+ - http://www.visualqa.org/challenge.html
+ - http://www.visualqa.org/evaluation.html
+ - https://arxiv.org/pdf/1611.09978.pdf
+
+### Experiment2
+
+ - https://github.com/Shivanshu-Gupta/Visual-Question-Answering
+ - https://vqa.cloudcv.org/
+ - https://arxiv.org/abs/1505.00468
+ - https://arxiv.org/pdf/1511.02274
+ - https://arxiv.org/abs/1705.06676
+ - http://visualqa.org/download.html
+ - https://github.com/Shivanshu-Gupta/Visual-Question-Answering/config
