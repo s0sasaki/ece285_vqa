@@ -5,7 +5,7 @@
 The experiment1 is an implementation for Bottom-Up and Top-Down Attention for Vision Question Answering. 
 This implementation is based on https://arxiv.org/abs/1707.07998 and is a modified version of https://github.com/hengyuan-hu/bottom-up-attention-vqa. 
 While the validation accuracy in the original repository is 63.58%, our results achieved 63.61%.
-You can see the detailed results of this experiments in our final report and the sample results in experiment1/demo/Demo.ipynb.
+You can see the detailed results in our final report and the sample results in experiment1/demo/Demo.ipynb.
 
 
 ## Requirements and Usage
